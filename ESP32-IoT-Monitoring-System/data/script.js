@@ -36,7 +36,7 @@ function Send_Data(data) {
 }
 
 // =================== CHART SCRIPT ====================
-let tempChart, humiChart, so2Chart, pm10Chart, pm25Chart;
+let tempChart, humiChart, no2Chart, pm10Chart, pm25Chart;
 let labels = [];
 let maxPoints = 10;
 
@@ -69,12 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  so2Chart = new Chart(document.getElementById("so2Chart"), {
+  no2Chart = new Chart(document.getElementById("no2Chart"), {
     type: "line",
     data: {
       labels: labels,
       datasets: [{
-        label: "SO₂ (mg/m³)",
+        label: "NO₂ (mg/m³)",
         data: [],
         borderWidth: 2,
         borderColor: "#8000ff",
@@ -119,14 +119,14 @@ function average(arr) {
     return (sum / arr.length).toFixed(2);
 }
 
-function updateCharts(temp, humi, so2, pm10, pm25) {
+function updateCharts(temp, humi, no2, pm10, pm25) {
   let now = new Date();
   let timeLabel = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
 
   labels.push(timeLabel);
   tempChart.data.datasets[0].data.push(temp);
   humiChart.data.datasets[0].data.push(humi);
-  so2Chart.data.datasets[0].data.push(so2);
+  no2Chart.data.datasets[0].data.push(no2);
   pm10Chart.data.datasets[0].data.push(pm10);
   pm25Chart.data.datasets[0].data.push(pm25);
 
@@ -134,20 +134,20 @@ function updateCharts(temp, humi, so2, pm10, pm25) {
     labels.shift();
     tempChart.data.datasets[0].data.shift();
     humiChart.data.datasets[0].data.shift();
-    so2Chart.data.datasets[0].data.shift();
+    no2Chart.data.datasets[0].data.shift();
     pm10Chart.data.datasets[0].data.shift();
     pm25Chart.data.datasets[0].data.shift();
   }
 
   tempChart.update();
   humiChart.update();
-  so2Chart.update();
+  no2Chart.update();
   pm10Chart.update();
   pm25Chart.update();
 
   document.getElementById("avgTemp").textContent = average(tempChart.data.datasets[0].data) + " °C";
   document.getElementById("avgHumi").textContent = average(humiChart.data.datasets[0].data) + " %";
-  document.getElementById("avgSo2").textContent = average(so2Chart.data.datasets[0].data) + " mg/m³";
+  document.getElementById("avgNo2").textContent = average(no2Chart.data.datasets[0].data) + " mg/m³";
   document.getElementById("avgPm10").textContent = average(pm10Chart.data.datasets[0].data) + " µg/m³";
   document.getElementById("avgPm25").textContent = average(pm25Chart.data.datasets[0].data) + " µg/m³";
 
@@ -165,7 +165,7 @@ function onMessage(event) {
         document.getElementById("connectedClients").textContent = data.clients + " devices";
         document.getElementById("tempValue").textContent = data.temperature + " °C";
         document.getElementById("humiValue").textContent = data.humidity + " %";
-        document.getElementById("so2Value").textContent = data.so2 + " mg/m³";
+        document.getElementById("no2Value").textContent = data.no2 + " mg/m³";
         document.getElementById("pm10Value").textContent = data.pm10 + " µg/m³";
         document.getElementById("pm25Value").textContent = data.pm25 + " µg/m³";
 
@@ -174,7 +174,7 @@ function onMessage(event) {
         // document.getElementById("npk-k").textContent = data["NPK-K"] + " mg/kg";
 
         // Update charts with new data
-        updateCharts(data.temperature, data.humidity, data.so2, data.pm10, data.pm25);
+        updateCharts(data.temperature, data.humidity, data.no2, data.pm10, data.pm25);
     } catch (e) {
         console.warn("Invalid JSON:", event.data);
     }
