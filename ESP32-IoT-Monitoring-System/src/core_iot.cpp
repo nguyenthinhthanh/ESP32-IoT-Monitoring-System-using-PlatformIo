@@ -8,7 +8,7 @@ constexpr std::array<const char*, MAX_ATTRIBUTES> SHARED_ATTRIBUTES = {
   "dataInterval"
 };
 void requestTimedOut() {
-  Serial.printf("Error: Attribute request timed out did not receive a response in (%llu) microseconds. Ensure client is connected to the MQTT broker and that the keys actually exist on the target device\n", REQUEST_TIMEOUT_MICROSECONDS);
+  Serial.printf("Error: [CoreIOT] Attribute request timed out did not receive a response in (%llu) microseconds. Ensure client is connected to the MQTT broker and that the keys actually exist on the target device\n", REQUEST_TIMEOUT_MICROSECONDS);
 }
 // Initialize underlying client, used to establish a connection
 WiFiClient espClient;
@@ -37,18 +37,18 @@ bool updateRequestSent = false;
 bool requestedShared = false;
 
 static void updateStartingCallback() {
-  Serial.println("Info: Starting firmware update...");
+  Serial.println("Info: [CoreIOT] Starting firmware update...");
 }
 void finishedCallback(const bool & success) {
   if (success) {
-    Serial.println("Info: Done, Reboot now");
+    Serial.println("Info: [CoreIOT] Done, Reboot now");
     esp_restart();
     return;
   }
-  Serial.println("Error: Firmware update failed");
+  Serial.println("Error: [CoreIOT] Firmware update failed");
 }
 void progressCallback(const size_t & current, const size_t & total) {
-  Serial.printf("Info: Progress %.2f%%\n", static_cast<float>(current * 100U) / total);
+  Serial.printf("Info: [CoreIOT] Progress %.2f%%\n", static_cast<float>(current * 100U) / total);
 }
 static void vCheckFWUpdateTask(void * pvParameters){
   vTaskDelay(10000);
@@ -58,19 +58,19 @@ static void vCheckFWUpdateTask(void * pvParameters){
   vTaskDelete(NULL);
 }
 void handlePOWER1(const JsonVariantConst &data, JsonDocument &response){
-  Serial.println("Info: Received POWER1 RPC request");
+  Serial.println("Info: [CoreIOT] Received POWER1 RPC request");
   bool newState = false;  
   if (data.is<bool>()) {
       newState = data.as<bool>();
   } else {
-      Serial.println("Error: RPC data was not a boolean!");
+      Serial.println("Error: [CoreIOT] RPC data was not a boolean!");
       return; // Ignore invalid data
   }
   RelayCommand_t cmd = {.target_id = 0, .state = newState};
   // Send the command to the relay task queue (non-blocking)
   if (xQueueSend(xRelayControlQueue, &cmd, 0) != pdPASS) {
       // Handle error if the queue is full
-      Serial.println("Error: Relay control queue is full!");
+      Serial.println("Error: [CoreIOT] Relay control queue is full!");
   }
 }
 void handlePOWER2(const JsonVariantConst &data, JsonDocument &response){
@@ -78,7 +78,7 @@ void handlePOWER2(const JsonVariantConst &data, JsonDocument &response){
   if (data.is<bool>()) {
       newState = data.as<bool>();
   } else {
-      Serial.println("Error: RPC data was not a boolean.");
+      Serial.println("Error: [CoreIOT] RPC data was not a boolean.");
       return; // Ignore invalid data
   }
   // Create the command structure
@@ -86,7 +86,7 @@ void handlePOWER2(const JsonVariantConst &data, JsonDocument &response){
   // Send the command to the relay task queue (non-blocking)
   if (xQueueSend(xRelayControlQueue, &cmd, 0) != pdPASS) {
       // Handle error if the queue is full
-      Serial.println("Error: Relay control queue is full!");
+      Serial.println("Error: [CoreIOT] Relay control queue is full!");
   }
 }
 void processSharedAttributeUpdate(const JsonObjectConst &data) {
@@ -97,7 +97,7 @@ void processSharedAttributeUpdate(const JsonObjectConst &data) {
 
         RelayCommand_t cmd = {.target_id = RELAY_0, .state = ledState};
         if(xQueueSend(xRelayControlQueue, &cmd, 0) != pdPASS) {
-            Serial.println("Error: Relay control queue is full!");
+            Serial.println("Error: [CoreIOT] Relay control queue is full!");
         }
     }
 
@@ -130,7 +130,7 @@ bool subscribeToAPIs(){
     Serial.print(CURRENT_FIRMWARE_TITLE);
     Serial.println(CURRENT_FIRMWARE_VERSION);
     const OTA_Update_Callback callback(CURRENT_FIRMWARE_TITLE, CURRENT_FIRMWARE_VERSION, &updater, &finishedCallback, &progressCallback, &updateStartingCallback, FIRMWARE_FAILURE_RETRIES, FIRMWARE_PACKET_SIZE);
-    Serial.print("Info: Firmware Update Subscription...");
+    Serial.print("Info: [CoreIOT] Firmware Update Subscription...");
     updateRequestSent = ota.Subscribe_Firmware_Update(callback);
     if(updateRequestSent) {
       Serial.println("Done");
@@ -141,7 +141,7 @@ bool subscribeToAPIs(){
     }
   }
   if (!rpc_subscribed){
-    Serial.print("Info: Subscribing for RPC...");
+    Serial.print("Info: [CoreIOT] Subscribing for RPC...");
     const RPC_Callback callbacks[MAX_RPC_SUBSCRIPTIONS]= {
         {"POWER1", handlePOWER1},
         {"POWER2", handlePOWER2}
@@ -154,21 +154,21 @@ bool subscribeToAPIs(){
     rpc_subscribed = true;
   }
   if (!shared_update_subscribed){
-    Serial.print("Info: Subscribing for shared attribute updates...");
+    Serial.print("Info: [CoreIOT] Subscribing for shared attribute updates...");
     const Shared_Attribute_Callback<MAX_ATTRIBUTES> callback(&processSharedAttributeUpdate, SHARED_ATTRIBUTES);
     if (!shared_update.Shared_Attributes_Subscribe(callback)) {
-    Serial.println("Error: Failed");
+    Serial.println("Error: [CoreIOT] Failed");
     return false;
     }
     Serial.println("Done");
     shared_update_subscribed = true;
   }
   if (!requestedShared) {
-    Serial.println("Info: Requesting shared attributes...");
+    Serial.println("Info: [CoreIOT] Requesting shared attributes...");
     const Attribute_Request_Callback<MAX_ATTRIBUTES> sharedCallback(&processSharedAttributeUpdate, REQUEST_TIMEOUT_MICROSECONDS, &requestTimedOut, SHARED_ATTRIBUTES);
     requestedShared = attr_request.Shared_Attributes_Request(sharedCallback);
     if (!requestedShared) {
-      Serial.println("Error: Failed");
+      Serial.println("Error: [CoreIOT] Failed");
       return false;
     }
   }
@@ -181,7 +181,7 @@ void coreiot_task(void * pvParameters){
   String telemetry, attribute;
   
   if (xSemaphoreTake(xBinarySemaphoreInternet, portMAX_DELAY) == pdTRUE) {
-    Serial.println("Info: Connected to Wifi");
+    Serial.println("Info: [CoreIOT] Connected to Wifi");
   }
 
   for(;;){
@@ -199,9 +199,9 @@ void coreiot_task(void * pvParameters){
     if (!tb.connected()) {
       // Reconnect to the ThingsBoard server,
       // if a connection was disrupted or has not yet been established
-      Serial.printf("[MQT]: Connecting to: (%s) with token (%s)\n", CORE_IOT_SERVER.c_str(), CORE_IOT_TOKEN.c_str());
+      Serial.printf("Info: [MQT] Connecting to: (%s) with token (%s)\n", CORE_IOT_SERVER.c_str(), CORE_IOT_TOKEN.c_str());
       if (!tb.connect(CORE_IOT_SERVER.c_str(), CORE_IOT_TOKEN.c_str(), CORE_IOT_PORT.toInt())) {
-        Serial.println("[MQT]: Failed to connect, retrying in 5 seconds...");
+        Serial.println("Error: [MQT] Failed to connect, retrying in 5 seconds...");
         vTaskDelay(5000 / portTICK_PERIOD_MS);
         continue;
       }
@@ -215,7 +215,7 @@ void coreiot_task(void * pvParameters){
       previousDataSend = millis();
 
       telemetry = getSensorDataJsonString();
-      Serial.println("[MQT] Sending telemetry: " + telemetry);
+      Serial.println("Info: [MQT] Sending telemetry: " + telemetry);
       tb.sendTelemetryString(telemetry.c_str());
       
       attribute = "{";

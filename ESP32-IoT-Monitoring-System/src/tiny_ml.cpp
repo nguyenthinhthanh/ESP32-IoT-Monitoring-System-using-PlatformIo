@@ -14,14 +14,14 @@ namespace
 
 void setupTinyML()
 {
-    Serial.println("Info: TensorFlow Lite Init....");
+    Serial.println("Info: [Tiny ML] Init....");
     static tflite::MicroErrorReporter micro_error_reporter;
     error_reporter = &micro_error_reporter;
 
     model = tflite::GetModel(dht_anomaly_model_tflite); // g_model_data is from model_data.h
     if (model->version() != TFLITE_SCHEMA_VERSION)
     {
-        error_reporter->Report("Info: Model provided is schema version %d, not equal to supported version %d.",
+        error_reporter->Report("Info: [Tiny ML] Model provided is schema version %d, not equal to supported version %d.",
                                model->version(), TFLITE_SCHEMA_VERSION);
         return;
     }
@@ -34,14 +34,14 @@ void setupTinyML()
     TfLiteStatus allocate_status = interpreter->AllocateTensors();
     if (allocate_status != kTfLiteOk)
     {
-        error_reporter->Report("Error: AllocateTensors() failed!");
+        error_reporter->Report("Error: [Tiny ML] AllocateTensors() failed!");
         return;
     }
 
     input = interpreter->input(0);
     output = interpreter->output(0);
 
-    Serial.println("Info: TensorFlow Lite Micro initialized on ESP32.");
+    Serial.println("Info: [Tiny ML] TensorFlow Lite Micro initialized on ESP32.");
 }
 
 void tiny_ml_task(void *pvParameters)
@@ -60,13 +60,13 @@ void tiny_ml_task(void *pvParameters)
         TfLiteStatus invoke_status = interpreter->Invoke();
         if (invoke_status != kTfLiteOk)
         {
-            error_reporter->Report("Error: Invoke failed!");
+            error_reporter->Report("Error: [Tiny ML] Invoke failed!");
             return;
         }
 
         // Get and process output
         float result = output->data.f[0];
-        Serial.print("Info: Inference result: ");
+        Serial.print("Info: [Tiny ML] Inference result: ");
         Serial.println(result);
 
         vTaskDelay(5000);

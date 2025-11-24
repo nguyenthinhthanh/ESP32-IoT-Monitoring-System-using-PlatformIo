@@ -14,9 +14,9 @@ void relay_task(void *pvParameters) {
       // Check which relay to control
       if (cmd.target_id < RELAY_COUNT) {
         digitalWrite(relayPin[cmd.target_id], cmd.state ? HIGH : LOW);
-        Serial.printf("Relay %d turned %s\n", cmd.target_id, cmd.state ? "ON" : "OFF");
+        Serial.printf("Info: [Relay] Relay %d turned %s\n", cmd.target_id, cmd.state ? "ON" : "OFF");
       } else {
-        Serial.printf("Invalid relay ID: %d\n", cmd.target_id);
+        Serial.printf("Error: [Relay] Invalid relay ID: %d\n", cmd.target_id);
       }
     }
   }

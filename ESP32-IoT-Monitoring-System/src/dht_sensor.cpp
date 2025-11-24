@@ -6,7 +6,7 @@ void dht_task (void * pvParameter){
     DHT20 dht(&Wire);
     for(;;) {
         if(!dht.isConnected()){
-            Serial.println("[DHT] sensor not connected!");
+            Serial.println("Error: [DHT] sensor not connected!");
             vTaskDelay(5000 / portTICK_PERIOD_MS);
             continue;
         }
@@ -39,7 +39,6 @@ void dht_task (void * pvParameter){
         if (xQueueSend(xSensorDataQueue, json, 0) != pdPASS) {
             Serial.println("Error: [DHT] Failed to send telemetry data to queue");
         }
-        // Serial.printf("[DHT] Done (%dms)\n", millis() - start);
-
+        // Serial.printf("Info: [DHT] Done (%dms)\n", millis() - start);
     }
 }

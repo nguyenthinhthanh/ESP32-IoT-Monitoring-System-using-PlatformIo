@@ -4,7 +4,7 @@ void startAP()
 {
     WiFi.mode(WIFI_AP);
     WiFi.softAP(String(AP_SSID), String(AP_PASSWORD));
-    Serial.print("AP IP: ");
+    Serial.print("Info: [WiFi] AP IP: ");
     Serial.println(WiFi.softAPIP());
 
     if (xSemaphoreTake(xApModeMutex, portMAX_DELAY) == pdTRUE) {
@@ -22,7 +22,7 @@ void startSTA()
 {
     if (WIFI_SSID.isEmpty())
     {
-        Serial.println("Info: Reconnect Wifi failed, SSID is empty");
+        Serial.println("Info: [WiFi] Reconnect Wifi failed, SSID is empty");
         return;
     }
 
@@ -38,7 +38,7 @@ void startSTA()
     }
     xSemaphoreGive(xNeoUpdateSemaphore);
 
-    Serial.print("Info: Connecting to WiFi...");
+    Serial.print("Info: [WiFi] Connecting to WiFi...");
     if (WIFI_PASSWORD.isEmpty())
     {
         WiFi.begin(WIFI_SSID.c_str());
@@ -56,7 +56,7 @@ void startSTA()
 
     //Internet access
     Serial.println("");
-    Serial.println("Info: Connected to WiFi");
+    Serial.println("Info: [WiFi] Connected to WiFi");
     Serial.println("WIFI_SSID = " + String(WIFI_SSID));
     Serial.println("WIFI_PASSWORD = " + String(WIFI_PASSWORD));
 

@@ -8,7 +8,7 @@ void handleWebSocketMessage(String message)
     DeserializationError error = deserializeJson(doc, message);
     if (error)
     {
-        Serial.println("Error: JSON parse error!");
+        Serial.println("Error: [WebSocket] JSON parse error!");
         return;
     }
     JsonObject value = doc["value"];
@@ -16,24 +16,24 @@ void handleWebSocketMessage(String message)
     {
         if (!value.containsKey("gpio") || !value.containsKey("status"))
         {
-            Serial.println("Error: JSON missing gpio or status information!");
+            Serial.println("Error: [WebSocket] JSON missing gpio or status information!");
             return;
         }
 
         int gpio = value["gpio"];
         String status = value["status"].as<String>();
 
-        Serial.printf("Info: Control GPIO %d → %s\n", gpio, status.c_str());
+        Serial.printf("Info: [WebSocket] Control GPIO %d → %s\n", gpio, status.c_str());
         pinMode(gpio, OUTPUT);
         if (status.equalsIgnoreCase("ON"))
         {
             digitalWrite(gpio, HIGH);
-            Serial.printf("Info: GPIO %d ON\n", gpio);
+            Serial.printf("Info: [WebSocket] GPIO %d ON\n", gpio);
         }
         else if (status.equalsIgnoreCase("OFF"))
         {
             digitalWrite(gpio, LOW);
-            Serial.printf("Info: GPIO %d OFF\n", gpio);
+            Serial.printf("Info: [WebSocket] GPIO %d OFF\n", gpio);
         }
     }
     else if (doc["page"] == "setting")
@@ -44,7 +44,7 @@ void handleWebSocketMessage(String message)
         String CORE_IOT_SERVER = doc["value"]["server"].as<String>();
         String CORE_IOT_PORT = doc["value"]["port"].as<String>();
 
-        Serial.println("Info: Received configuration from WebSocket:");
+        Serial.println("Info: [WebSocket] Received configuration from WebSocket:");
         Serial.println("SSID: " + WIFI_SSID);
         Serial.println("PASS: " + WIFI_PASS);
         Serial.println("TOKEN: " + CORE_IOT_TOKEN);

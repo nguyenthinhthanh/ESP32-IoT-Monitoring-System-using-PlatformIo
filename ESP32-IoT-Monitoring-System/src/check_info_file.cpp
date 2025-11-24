@@ -11,7 +11,7 @@ void loadInfoFile()
   DeserializationError error = deserializeJson(doc, file);
   if (error)
   {
-    Serial.print(F("Error: deserializeJson() failed!"));
+    Serial.print(F("Error: [FS] deserializeJson() failed!"));
   }
   else
   {
@@ -22,7 +22,7 @@ void loadInfoFile()
     CORE_IOT_PORT = strdup(doc["CORE_IOT_PORT"]);
 
     // Debug output
-    Serial.println("Info: Loaded configuration from info.dat");
+    Serial.println("Info: [FS] Loaded configuration from info.dat");
     Serial.println("WIFI_SSID = " + String(WIFI_SSID));
     Serial.println("WIFI_PASSWORD = " + String(WIFI_PASSWORD));
     Serial.println("CORE_IOT_TOKEN = " + String(CORE_IOT_TOKEN));
@@ -37,10 +37,10 @@ void deleteInfoFile()
   if (LittleFS.exists("/info.dat"))
   {
     LittleFS.remove("/info.dat");
-    Serial.println("Info: Deleted configuration file info.dat");
+    Serial.println("Info: [FS] Deleted configuration file info.dat");
   }
   else{
-    Serial.println("Info: Configuration file info.dat does not exist");
+    Serial.println("Info: [FS] Configuration file info.dat does not exist");
   }
   ESP.restart();
 }
@@ -64,7 +64,7 @@ void saveInfoFile(String wifi_ssid, String wifi_pass, String CORE_IOT_TOKEN, Str
     configFile.close();
 
     // Debug output
-    Serial.println("Info: Configuration saved to info.dat");
+    Serial.println("Info: [FS] Configuration saved to info.dat");
     Serial.println("WIFI_SSID = " + String(wifi_ssid));
     Serial.println("WIFI_PASSWORD = " + String(wifi_pass));
     Serial.println("CORE_IOT_TOKEN = " + String(CORE_IOT_TOKEN));
@@ -73,7 +73,7 @@ void saveInfoFile(String wifi_ssid, String wifi_pass, String CORE_IOT_TOKEN, Str
   }
   else
   {
-    Serial.println("Error: Unable to save the configuration!");
+    Serial.println("Error: [FS] Unable to save the configuration!");
   }
   ESP.restart();
 };
@@ -84,7 +84,7 @@ bool checkInfoFile(bool check)
   {
     if (!LittleFS.begin(true))
     {
-      Serial.println("Error: LittleFS startup failed!");
+      Serial.println("Error: [FS] LittleFS startup failed!");
       return false;
     }
     loadInfoFile();

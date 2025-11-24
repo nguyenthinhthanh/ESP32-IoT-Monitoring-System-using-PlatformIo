@@ -15,7 +15,7 @@ void toogle_boot_task(void *pvParameters)
             vTaskDelay(100 / portTICK_PERIOD_MS); // Debounce delay
             if (digitalRead(BOOT_PIN) == LOW)
             {
-                Serial.println("Info: press detected, calling deleteInfoFile()");
+                Serial.println("Info: [TOOGLE_BOOT] press detected, calling deleteInfoFile()");
                 deleteInfoFile();
 
                 vTaskDelay(500 / portTICK_PERIOD_MS);
