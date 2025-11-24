@@ -113,6 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
 });
 
+function average(arr) {
+    if (arr.length === 0) return 0;
+    let sum = arr.reduce((a, b) => a + b, 0);
+    return (sum / arr.length).toFixed(2);
+}
+
 function updateCharts(temp, humi, so2, pm10, pm25) {
   let now = new Date();
   let timeLabel = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
@@ -138,6 +144,16 @@ function updateCharts(temp, humi, so2, pm10, pm25) {
   so2Chart.update();
   pm10Chart.update();
   pm25Chart.update();
+
+  document.getElementById("avgTemp").textContent = average(tempChart.data.datasets[0].data) + " °C";
+  document.getElementById("avgHumi").textContent = average(humiChart.data.datasets[0].data) + " %";
+  document.getElementById("avgSo2").textContent = average(so2Chart.data.datasets[0].data) + " mg/m³";
+  document.getElementById("avgPm10").textContent = average(pm10Chart.data.datasets[0].data) + " µg/m³";
+  document.getElementById("avgPm25").textContent = average(pm25Chart.data.datasets[0].data) + " µg/m³";
+
+  document.getElementById("lastUpdate").textContent = now.getHours() + ":" + 
+                                                    String(now.getMinutes()).padStart(2,'0') + ":" +
+                                                    String(now.getSeconds()).padStart(2,'0');
 }
 
 
