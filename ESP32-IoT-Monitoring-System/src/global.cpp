@@ -1,4 +1,6 @@
 #include "global.h"
+#include "webserver.h"
+
 float glob_temperature = 0;
 float glob_humidity = 0;
 
@@ -67,6 +69,15 @@ String getSensorDataJsonString() {
             first = false;
         }
     }
+
+    // Add connected clients count
+    int clientCount = getWebSocketClientCount();
+    char clientJson[32];
+    snprintf(clientJson, sizeof(clientJson), "%s\"clients\":%d",
+             first ? "" : ",",
+             clientCount);
+
+    strcat(newJson, clientJson);
 
     strcat(newJson, "}");
     strcpy(globalSensorJson, newJson);

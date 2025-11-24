@@ -13,6 +13,8 @@ extern AsyncWebSocket ws;
 
 extern bool webserver_isrunning;
 
+int getWebSocketClientCount();
+
 void stopWebserver();
 void reconnectWebserver();
 void sendDataWebserver(String data);

@@ -40,8 +40,13 @@ function onMessage(event) {
     try {
         var data = JSON.parse(event.data);
         // You can add specific handling here if needed (e.g., update status)
+        document.getElementById("connectedClients").textContent = data.clients + " devices";
         document.getElementById("tempValue").textContent = data.temperature + " °C";
         document.getElementById("humiValue").textContent = data.humidity + " %";
+        // document.getElementById("npk-n").textContent = data["NPK-N"] + " mg/kg";
+        // document.getElementById("npk-p").textContent = data["NPK-P"] + " mg/kg";
+        // document.getElementById("npk-k").textContent = data["NPK-K"] + " mg/kg";
+
     } catch (e) {
         console.warn("Invalid JSON:", event.data);
     }
