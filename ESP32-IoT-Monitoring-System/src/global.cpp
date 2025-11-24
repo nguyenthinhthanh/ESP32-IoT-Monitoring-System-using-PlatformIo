@@ -4,7 +4,7 @@
 float glob_temperature = 0;
 float glob_humidity = 0;
 
-uint32_t send_data_webserver_interval = 3000;
+uint32_t send_data_webserver_interval = 5000;
 uint32_t telemetrySendInterval = 10000U;
 
 String CORE_IOT_TOKEN;

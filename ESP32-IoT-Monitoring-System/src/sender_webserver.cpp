@@ -32,7 +32,7 @@ void send_data_webserver_task(void *pvParameters)
         if (!webserver_isrunning)
         {
             // Serial.println("Info: [SENDER] Webserver is not running, delaying send data task");
-            vTaskDelay(2000 / portTICK_PERIOD_MS);
+            vTaskDelay(3000 / portTICK_PERIOD_MS);
             continue;
         }
         

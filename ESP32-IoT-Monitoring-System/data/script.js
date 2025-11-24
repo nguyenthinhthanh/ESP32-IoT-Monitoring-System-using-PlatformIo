@@ -35,6 +35,112 @@ function Send_Data(data) {
     }
 }
 
+// =================== CHART SCRIPT ====================
+let tempChart, humiChart, so2Chart, pm10Chart, pm25Chart;
+let labels = [];
+let maxPoints = 10;
+
+document.addEventListener("DOMContentLoaded", () => {
+  tempChart = new Chart(document.getElementById("tempChart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Temperature (°C)",
+        data: [],
+        borderWidth: 2,
+        borderColor: "#ff7a1a",
+        tension: 0.3
+      }]
+    }
+  });
+
+  humiChart = new Chart(document.getElementById("humiChart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Humidity (%)",
+        data: [],
+        borderWidth: 2,
+        borderColor: "#07a0b5",
+        tension: 0.3
+      }]
+    }
+  });
+
+  so2Chart = new Chart(document.getElementById("so2Chart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "SO₂ (mg/m³)",
+        data: [],
+        borderWidth: 2,
+        borderColor: "#8000ff",
+        tension: 0.3
+      }]
+    }
+  });
+
+  pm10Chart = new Chart(document.getElementById("pm10Chart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "PM10 (µg/m³)",
+        data: [],
+        borderWidth: 2,
+        borderColor: "#00b300",
+        tension: 0.3
+      }]
+    }
+  });
+
+  pm25Chart = new Chart(document.getElementById("pm25Chart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "PM2.5 (µg/m³)",
+        data: [],
+        borderWidth: 2,
+        borderColor: "#ff6600",
+        tension: 0.3
+      }]
+    }
+  });
+  
+});
+
+function updateCharts(temp, humi, so2, pm10, pm25) {
+  let now = new Date();
+  let timeLabel = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+
+  labels.push(timeLabel);
+  tempChart.data.datasets[0].data.push(temp);
+  humiChart.data.datasets[0].data.push(humi);
+  so2Chart.data.datasets[0].data.push(so2);
+  pm10Chart.data.datasets[0].data.push(pm10);
+  pm25Chart.data.datasets[0].data.push(pm25);
+
+  if (labels.length > maxPoints) {
+    labels.shift();
+    tempChart.data.datasets[0].data.shift();
+    humiChart.data.datasets[0].data.shift();
+    so2Chart.data.datasets[0].data.shift();
+    pm10Chart.data.datasets[0].data.shift();
+    pm25Chart.data.datasets[0].data.shift();
+  }
+
+  tempChart.update();
+  humiChart.update();
+  so2Chart.update();
+  pm10Chart.update();
+  pm25Chart.update();
+}
+
+
 function onMessage(event) {
     console.log("Received:", event.data);
     try {
@@ -43,10 +149,16 @@ function onMessage(event) {
         document.getElementById("connectedClients").textContent = data.clients + " devices";
         document.getElementById("tempValue").textContent = data.temperature + " °C";
         document.getElementById("humiValue").textContent = data.humidity + " %";
+        document.getElementById("so2Value").textContent = data.so2 + " mg/m³";
+        document.getElementById("pm10Value").textContent = data.pm10 + " µg/m³";
+        document.getElementById("pm25Value").textContent = data.pm25 + " µg/m³";
+
         // document.getElementById("npk-n").textContent = data["NPK-N"] + " mg/kg";
         // document.getElementById("npk-p").textContent = data["NPK-P"] + " mg/kg";
         // document.getElementById("npk-k").textContent = data["NPK-K"] + " mg/kg";
 
+        // Update charts with new data
+        updateCharts(data.temperature, data.humidity, data.so2, data.pm10, data.pm25);
     } catch (e) {
         console.warn("Invalid JSON:", event.data);
     }

@@ -5,6 +5,8 @@ void dht_task (void * pvParameter){
     char json[64];
     DHT20 dht(&Wire);
     for(;;) {
+        vTaskDelay(200 / portTICK_PERIOD_MS);
+
         if(!dht.isConnected()){
             Serial.println("Error: [DHT] sensor not connected!");
             vTaskDelay(5000 / portTICK_PERIOD_MS);

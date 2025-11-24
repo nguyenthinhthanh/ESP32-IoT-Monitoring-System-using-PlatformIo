@@ -8,7 +8,7 @@ void relay_task(void *pvParameters) {
     digitalWrite(relayPin[id], LOW); // Initialize all relays to OFF
   }
   for (;;) {
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
     // Block and wait indefinitely for a command
     if (xQueueReceive(xRelayControlQueue, &cmd, portMAX_DELAY) == pdPASS) {
       // Check which relay to control

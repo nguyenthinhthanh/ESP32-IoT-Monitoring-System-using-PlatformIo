@@ -48,5 +48,7 @@ void neo_led_task(void *pvParameters) {
         neoSetColor(0, 0, 0); // Off
       }
     }
+
+    vTaskDelay(500 / portTICK_PERIOD_MS);
   }
 }

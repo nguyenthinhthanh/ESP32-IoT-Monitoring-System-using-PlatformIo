@@ -107,43 +107,43 @@
           </div>
         </div>
 
-        <!-- Nitrogen (N) -->
+        <!-- SO2 -->
         <div class="stat-card">
           <div class="icon purple">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M7 3v18h2V7l8 14h2V3h-2v10L11 3H7z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 24 24">
+              <text x="12" y="16" text-anchor="middle" font-size="16" font-family="Arial" font-weight="bold">S</text>
             </svg>
           </div>
           <div>
-            <p class="label">Nitrogen (N)</p>
-            <p class="value" id="npk-n">mg/kg</p>
+            <p class="label">SO₂</p>
+            <p class="value" id="so2Value">mg/m³</p>
           </div>
         </div>
 
-        <!-- Phosphorus (P) -->
+
+        <!-- PM10 -->
         <div class="stat-card">
           <div class="icon cyan">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M10 7v10h2v-4h2.2a3 3 0 0 0 0-6H10zm4.1 3a1.1 1.1 0 0 1 0 2.2H12V10h2.1z" fill="white"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 28 24">
+              <text x="14" y="16" text-anchor="middle" font-size="10" font-family="Arial" font-weight="bold">PM10</text>
             </svg>
           </div>
           <div>
-            <p class="label">Phosphorus (P)</p>
-            <p class="value" id="npk-p">mg/kg</p>
+            <p class="label">PM10</p>
+            <p class="value" id="pm10Value">µg/m³</p>
           </div>
         </div>
 
-        <!-- Potassium (K) -->
+        <!-- PM2.5 -->
         <div class="stat-card">
           <div class="icon green">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M6 3v18h2V13h2l4 8h2l-4.5-9L16 3h-2l-3 6H8V3H6z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="30" fill="currentColor" viewBox="0 0 28 24">
+              <text x="14" y="16" text-anchor="middle" font-size="10" font-family="Arial" font-weight="bold">PM2.5</text>
             </svg>
           </div>
           <div>
-            <p class="label">Potassium (K)</p>
-            <p class="value" id="npk-k">mg/kg</p>
+            <p class="label">PM2.5</p>
+            <p class="value" id="pm25Value">µg/m³</p>
           </div>
         </div>
       </div>
@@ -165,18 +165,18 @@
         </div>
 
         <div class="chart-card">
-          <h3>Nitrogen (N) Trends</h3>
-          <canvas id="npkNChart" height="140"></canvas>
+          <h3>SO₂ Trends</h3>
+          <canvas id="so2Chart" height="140"></canvas>
         </div>
 
         <div class="chart-card">
-          <h3>Phosphorus (P) Trends</h3>
-          <canvas id="npkPChart" height="140"></canvas>
+          <h3>PM10 Trends</h3>
+          <canvas id="pm10Chart" height="140"></canvas>
         </div>
 
         <div class="chart-card">
-          <h3>Potassium(K) Trends</h3>
-          <canvas id="npkKChart" height="140"></canvas>
+          <h3>PM2.5 Trends</h3>
+          <canvas id="pm25Chart" height="140"></canvas>
         </div>
       </section>
 
@@ -195,16 +195,16 @@
           <p class="value" id="avgHumi" style="font-size:20px;">50.6%</p>
         </div>
         <div>
-          <p class="label">Average Nitrogen</p>
-          <p class="value" id="avgNpkN" style="font-size:20px;">31 mg/kg</p>
+          <p class="label">Average SO₂</p>
+          <p class="value" id="avgSo2" style="font-size:20px;">31 mg/m³</p>
         </div>
         <div>
-          <p class="label">Average Phosphorus</p>
-          <p class="value" id="avgNpkP" style="font-size:20px;">22 mg/kg</p>
+          <p class="label">Average PM10</p>
+          <p class="value" id="avgPm10" style="font-size:20px;">22 µg/m³</p>
         </div>
         <div>
-          <p class="label">Average Potassium</p>
-          <p class="value" id="avgNpkK" style="font-size:20px;">27 mg/kg</p>
+          <p class="label">Average PM2.5</p>
+          <p class="value" id="avgPm25" style="font-size:20px;">27 µg/m³</p>
         </div>
         <div>
           <p class="label">Last Update</p>
@@ -214,94 +214,6 @@
 
 <!-- Chart.js -->
 <script src="chart.umd.min.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  new Chart(document.getElementById("tempChart"), {
-    type: "line",
-    data: {
-      labels: ["10:00", "10:05", "10:10", "10:15"],
-      datasets: [{
-        label: "Temperature (°C)",
-        data: [22, 24, 23, 25],
-        borderWidth: 2,
-        borderColor: "#ff7a1a",
-        tension: 0.3
-      }]
-    }
-  });
-
-  new Chart(document.getElementById("humiChart"), {
-    type: "line",
-    data: {
-      labels: ["10:00", "10:05", "10:10", "10:15"],
-      datasets: [{
-        label: "Humidity (%)",
-        data: [50, 55, 52, 58],
-        borderWidth: 2,
-        borderColor: "#07a0b5",
-        tension: 0.3
-      }]
-    }
-  });
-
-  new Chart(document.getElementById("npkNChart"), {
-    type: "line",
-    data: {
-      labels: ["10:00", "10:05", "10:10", "10:15"],
-      datasets: [{
-        label: "Nitrogen (mg/kg)",
-        data: [30, 32, 31, 33],
-        borderWidth: 2,
-        borderColor: "#8000ff",
-        tension: 0.3
-      }]
-    }
-  });
-
-  new Chart(document.getElementById("npkPChart"), {
-    type: "line",
-    data: {
-      labels: ["10:00", "10:05", "10:10", "10:15"],
-      datasets: [{
-        label: "Phosphorus (mg/kg)",
-        data: [20, 22, 21, 23],
-        borderWidth: 2,
-        borderColor: "#00b300",
-        tension: 0.3
-      }]
-    }
-  });
-
-  new Chart(document.getElementById("npkKChart"), {
-    type: "line",
-    data: {
-      labels: ["10:00", "10:05", "10:10", "10:15"],
-      datasets: [{
-        label: "Potassium (mg/kg)",
-        data: [25, 27, 26, 28],
-        borderWidth: 2,
-        borderColor: "#ff6600",
-        tension: 0.3
-      }]
-    }
-  });
-
-});
-</script>
-
-      <!-- <div class="gauges-container">
-        <div class="gauge-card">
-          <h2>🌡️ Nhiệt độ (°C)</h2>
-          <div id="gauge_temp"></div>
-        </div>
-
-        <div class="gauge-card">
-          <h2>💧 Độ ẩm (%)</h2>
-          <div id="gauge_humi"></div>
-        </div>
-      </div> -->
     </div>
 
     <!-- DEVICE Page -->

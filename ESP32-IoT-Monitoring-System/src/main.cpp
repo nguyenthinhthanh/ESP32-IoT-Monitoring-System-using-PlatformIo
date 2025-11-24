@@ -10,6 +10,7 @@
 #include "toogle_boot.h"
 #include "check_info_file.h"
 #include "sender_webserver.h"
+#include "air_quality_sensor.h"
 
 void setup()
 {
@@ -19,14 +20,15 @@ void setup()
   checkInfoFile(0);
 
   xTaskCreate(neo_led_task, "NeoPixel Led Task", 2048, NULL, 2, NULL);
-  xTaskCreate(toogle_boot_task, "Toggle Boot Task" ,4096  ,NULL  ,2 , NULL);
+  xTaskCreate(toogle_boot_task, "Toggle Boot Task" ,2048  ,NULL  ,2 , NULL);
   // xTaskCreate(main_server_task, "Main Server Task" ,8192  ,NULL  ,2 , NULL);
   xTaskCreate(coreiot_task, "CoreIOT Task" ,4096  ,NULL  ,2 , NULL);
   xTaskCreate(relay_task, "Relay Control Task" ,2048  ,NULL  ,2 , NULL);
   xTaskCreate(dht_task, "DHT Sensor Task" ,4096  ,NULL  ,2 , NULL);
   // xTaskCreate(tiny_ml_task, "Tiny ML Task" ,2048  ,NULL  ,2 , NULL);
   // xTaskCreate(npk_sensor_task, "NPK Sensor Task" ,2048  ,NULL  ,2 , NULL);
-  xTaskCreate(send_data_webserver_task, "Send Data Webserver Task" ,2048  ,NULL  ,2 , NULL);
+  xTaskCreate(air_quality_task, "Air Quality Sensor Task" ,4096  ,NULL  ,2 , NULL);
+  xTaskCreate(send_data_webserver_task, "Send Data Webserver Task" ,4096  ,NULL  ,2 , NULL);
 }
 
 void loop()

@@ -25,6 +25,6 @@ void toogle_boot_task(void *pvParameters)
         {
             buttonPressStartTime = 0;
         }
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
