@@ -5,7 +5,6 @@
 #include "LittleFS.h"
 #include <AsyncTCP.h>
 #include <ArduinoJson.h>
-// #include <ElegantOTA.h>
 #include <handler_websocket.h>
 
 extern AsyncWebServer server;

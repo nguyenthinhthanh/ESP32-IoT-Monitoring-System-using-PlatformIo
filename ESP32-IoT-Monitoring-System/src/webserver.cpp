@@ -1,4 +1,5 @@
 #include "webserver.h"
+#include <ElegantOTA.h>
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -63,7 +64,7 @@ void connnectWSV()
     server.on("/styles.css", HTTP_GET, [](AsyncWebServerRequest *request)
               { request->send(LittleFS, "/styles.css", "text/css"); });
     server.begin();
-    // ElegantOTA.begin(&server);
+    ElegantOTA.begin(&server);
     webserver_isrunning = true;
     xSemaphoreGive(xBinarySemaphoreWebserver);
 }
@@ -83,5 +84,4 @@ void reconnectWebserver()
     {
         connnectWSV();
     }
-    // ElegantOTA.loop();
 }
