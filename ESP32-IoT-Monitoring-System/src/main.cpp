@@ -16,6 +16,7 @@ void setup()
 {
   Serial.begin(115200);
   Wire.begin(I2C_SDA,I2C_SCL);
+  SERIAL_RS485.begin(SERIAL_RS485_BAUD, SERIAL_RS485_CONFIG, SERIAL_RS485_RX_PIN, SERIAL_RS485_TX_PIN);
 
   checkInfoFile(0);
 

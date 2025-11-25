@@ -5,7 +5,7 @@ uint32_t previousDataSend = 0;
 constexpr uint8_t MAX_ATTRIBUTES = 2;
 constexpr std::array<const char*, MAX_ATTRIBUTES> SHARED_ATTRIBUTES = {
   "ledState",
-  "dataInterval"
+  "timeInterval"
 };
 void requestTimedOut() {
   Serial.printf("Error: [CoreIOT] Attribute request timed out did not receive a response in (%llu) microseconds. Ensure client is connected to the MQTT broker and that the keys actually exist on the target device\n", REQUEST_TIMEOUT_MICROSECONDS);
@@ -101,8 +101,8 @@ void processSharedAttributeUpdate(const JsonObjectConst &data) {
         }
     }
 
-    if (data.containsKey("dataInterval")) {
-        int dataInterval = data["dataInterval"].as<int>();
+    if (data.containsKey("timeInterval")) {
+        int dataInterval = data["timeInterval"].as<int>();
         if (dataInterval < 2) {
             dataInterval = 2; // Minimum interval of 2 seconds
         }

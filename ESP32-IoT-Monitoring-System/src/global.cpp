@@ -56,7 +56,7 @@ String getSensorDataJsonString() {
 
     for (int i = 0; i < SENSOR_COUNT; i++) {
 
-        if (xQueueReceive(xSensorDataQueue, buffer, pdMS_TO_TICKS(200)) == pdPASS) {
+        if (xQueueReceive(xSensorDataQueue, buffer, pdMS_TO_TICKS(500)) == pdPASS) {
 
             String s = String(buffer);
             s = s.substring(1, s.length() - 1);
