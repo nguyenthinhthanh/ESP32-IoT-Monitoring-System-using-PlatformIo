@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     data: {
       labels: labels,
       datasets: [{
-        label: "NO₂ (mg/m³)",
+        label: "NO₂ (ppm)",
         data: [],
         borderWidth: 2,
         borderColor: "#8000ff",
@@ -147,7 +147,7 @@ function updateCharts(temp, humi, no2, pm10, pm25) {
 
   document.getElementById("avgTemp").textContent = average(tempChart.data.datasets[0].data) + " °C";
   document.getElementById("avgHumi").textContent = average(humiChart.data.datasets[0].data) + " %";
-  document.getElementById("avgNo2").textContent = average(no2Chart.data.datasets[0].data) + " mg/m³";
+  document.getElementById("avgNo2").textContent = average(no2Chart.data.datasets[0].data) + " ppm";
   document.getElementById("avgPm10").textContent = average(pm10Chart.data.datasets[0].data) + " µg/m³";
   document.getElementById("avgPm25").textContent = average(pm25Chart.data.datasets[0].data) + " µg/m³";
 
@@ -165,7 +165,7 @@ function onMessage(event) {
         document.getElementById("connectedClients").textContent = data.clients + " devices";
         document.getElementById("tempValue").textContent = data.temperature + " °C";
         document.getElementById("humiValue").textContent = data.humidity + " %";
-        document.getElementById("no2Value").textContent = data.no2 + " mg/m³";
+        document.getElementById("no2Value").textContent = data.no2 + " ppm";
         document.getElementById("pm10Value").textContent = data.pm10 + " µg/m³";
         document.getElementById("pm25Value").textContent = data.pm25 + " µg/m³";
 
