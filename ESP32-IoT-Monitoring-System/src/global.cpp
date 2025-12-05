@@ -3,6 +3,11 @@
 
 float glob_temperature = 0;
 float glob_humidity = 0;
+float g_temperature = 0.0f;
+float g_humidity = 0.0f;
+float g_no2 = 0.0f;
+float g_pm25 = 0.0f;
+float g_pm10 = 0.0f;
 
 uint32_t send_data_webserver_interval = 5000;
 uint32_t telemetrySendInterval = 10000U;
@@ -56,7 +61,7 @@ String getSensorDataJsonString() {
 
     for (int i = 0; i < SENSOR_COUNT; i++) {
 
-        if (xQueueReceive(xSensorDataQueue, buffer, pdMS_TO_TICKS(200)) == pdPASS) {
+        if (xQueueReceive(xSensorDataQueue, buffer, pdMS_TO_TICKS(500)) == pdPASS) {
 
             String s = String(buffer);
             s = s.substring(1, s.length() - 1);

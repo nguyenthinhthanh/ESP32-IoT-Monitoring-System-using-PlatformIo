@@ -36,6 +36,8 @@ void dht_task (void * pvParameter){
             temperature = 0.0f;
             humidity = 0.0f;
         }
+        g_temperature = temperature;
+        g_humidity = humidity;
 
         snprintf(json, sizeof(json), "{\"temperature\":%.2f,\"humidity\":%.2f}", temperature, humidity);
         if (xQueueSend(xSensorDataQueue, json, 0) != pdPASS) {
