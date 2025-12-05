@@ -43,6 +43,9 @@ void air_quality_task(void * pvParameter){
             pm25 = 0;
             pm10 = 0;
         }
+        g_no2 = no2;
+        g_pm25 = pm25;
+        g_pm10 = pm10;
         snprintf(json, sizeof(json), "{\"no2\":%u,\"pm25\":%u,\"pm10\":%u}", no2, pm25, pm10);
         if (xQueueSend(xSensorDataQueue, json, 0) != pdPASS) {
             Serial.println("Error: [AIR] Failed to send telemetry data to queue");

@@ -8,6 +8,11 @@
 
 extern float glob_temperature;  
 extern float glob_humidity;  
+extern float g_temperature;
+extern float g_humidity;
+extern float g_no2;
+extern float g_pm25;
+extern float g_pm10;
 
 extern uint32_t send_data_webserver_interval;
 extern uint32_t telemetrySendInterval;
